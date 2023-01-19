@@ -1,6 +1,8 @@
 package com.system.exams.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,12 +14,12 @@ public class User {
     @Id
     //Me sirve para auto-incrementar el registro
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username;
-    private String password;
+    private int id;
     private String name;
     private String lastname;
+    private String username;
     private String email;
+    private String password;
     private String number;
     private boolean enabled = true;
     private String profile;
@@ -26,14 +28,16 @@ public class User {
     //Cascada: permite simplificar las operaciones en el codigo
     //(con las relacione de la tabla user y sus entidades hijas)
     //fetch EAGER: la busqueda va ser anciosa
-@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "user")
+
+    @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
 
 
     public User() {
     }
 
-    public User(Long id, String username, String password, String name, String lastname, String email, String number, boolean enabled, String profile, Set<UserRole> userRoles) {
+    public User(int id, String username, String password, String name, String lastname, String email, String number, boolean enabled, String profile) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,14 +47,13 @@ public class User {
         this.number = number;
         this.enabled = enabled;
         this.profile = profile;
-        this.userRoles = userRoles;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int    id) {
         this.id = id;
     }
 

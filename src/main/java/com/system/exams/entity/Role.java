@@ -9,8 +9,8 @@ import java.util.Set;
 public class Role {
 
     @Id
-    private Long roleId;
-    private String name;
+    private int roleId;
+    private String rolName;
 
     //un rol le puede pertenecer a muhcos usuarios
     //cuando hago una operación a un registro de esta tabla, le afecta a todos sus hijos
@@ -21,26 +21,25 @@ public class Role {
     public Role() {
     }
 
-    public Role(Long roleId, String name, Set<UserRole> userRoles) {
+    public Role(int roleId, String rolName) {
         this.roleId = roleId;
-        this.name = name;
-        this.userRoles = userRoles;
+        this.rolName = rolName;
     }
 
-    public Long getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
-    public String getName() {
-        return name;
+    public String getRolName() {
+        return rolName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRolName(String rolName) {
+        this.rolName = rolName;
     }
 
     public Set<UserRole> getUserRoles() {

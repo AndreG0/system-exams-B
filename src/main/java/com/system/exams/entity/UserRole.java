@@ -7,7 +7,7 @@ public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userRoleId;
+    private int userRoleId;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -19,17 +19,17 @@ public class UserRole {
     public UserRole() {
     }
 
-    public UserRole(Long userRoleId, User user, Role role) {
+    public UserRole(int userRoleId, User user, Role role) {
         this.userRoleId = userRoleId;
         this.user = user;
         this.role = role;
     }
 
-    public Long getUserRoleId() {
+    public int getUserRoleId() {
         return userRoleId;
     }
 
-    public void setUserRoleId(Long userRoleId) {
+    public void setUserRoleId(int userRoleId) {
         this.userRoleId = userRoleId;
     }
 
