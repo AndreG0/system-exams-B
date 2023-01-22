@@ -36,6 +36,7 @@ import java.util.Set;
             User user = userService.getOne(id).get();
             return new ResponseEntity<User>(user, HttpStatus.OK);
         }
+
 /*
     @GetMapping("detail/{name}")
         public ResponseEntity<User> getByName(@PathVariable("name") String name){
@@ -49,11 +50,12 @@ import java.util.Set;
 
         @PostMapping("/create")
         public User saveUser (@RequestBody User user ) throws Exception{
+            user.setProfile("default.png");
             Set<UserRole> userRoles = new HashSet<>();
 
             Role role = new Role();
             role.setRoleId(2);
-            role.setRolName("NORMAL");
+            role.setRolName("USER");
 
             UserRole userRole = new UserRole();
             userRole.setUser(user);
