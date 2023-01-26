@@ -2,7 +2,8 @@ package com.system.exams.controller;
 
 import com.system.exams.entity.JwtRequest;
 import com.system.exams.entity.JwtResponse;
-import com.system.exams.security.JwtUtil;
+import com.system.exams.entity.User;
+import com.system.exams.security.JwtUtils;
 import com.system.exams.service.Impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"}, allowedHeaders = "*", allowCredentials = "true")
 public class AuthenticationController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class AuthenticationController {
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtils jwtUtils;
 
 
     @PostMapping("/generate-token")
@@ -38,17 +40,25 @@ public class AuthenticationController {
             throw new Exception("User not found");
         }
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
-        String token = this.jwtUtil.generateToken(userDetails);
+        String token = this.jwtUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
      private void authentication (String username, String password) throws Exception{
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }catch (DisabledException disabledException){
-            throw new Exception("Disable user" + disabledException.getMessage());
+            throw new Exception("Disable user " + disabledException.getMessage());
 
         }catch (BadCredentialsException badCredentialsException){
-            throw new Exception("Invalid Credentials " + badCredentialsException.getMessage());
+            throw new Exception("Invalid credentials " + badCredentialsException.getMessage());
         }
      }
+
+
+     @GetMapping("/current-user")
+     public User getCurrentUser(Principal principal){
+        return (User) this.userDetailsService.loadUserByUsername(principal.getName());
+     }
+
+
 }
