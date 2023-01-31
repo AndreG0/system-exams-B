@@ -8,19 +8,23 @@ import com.system.exams.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@RequestMapping("/users")
+@CrossOrigin("*")
 @RestController
-    @RequestMapping("/users")
-@CrossOrigin(origins = {"http://localhost:4200"}, allowedHeaders = "*", allowCredentials = "true")
     public class UserController {
 
     @Autowired
-    UserService userService;
+   private UserService userService;
+
+    @Autowired
+   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
         @GetMapping("/list")
@@ -51,6 +55,9 @@ import java.util.Set;
         @PostMapping("/create")
         public User saveUser (@RequestBody User user ) throws Exception{
             user.setProfile("default.png");
+
+            user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+
             Set<UserRole> userRoles = new HashSet<>();
 
             Role role = new Role();

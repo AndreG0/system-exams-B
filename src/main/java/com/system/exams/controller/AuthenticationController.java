@@ -3,6 +3,7 @@ package com.system.exams.controller;
 import com.system.exams.entity.JwtRequest;
 import com.system.exams.entity.JwtResponse;
 import com.system.exams.entity.User;
+import com.system.exams.exceptions.UserNotFoundException;
 import com.system.exams.security.JwtUtils;
 import com.system.exams.service.Impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
+
+@CrossOrigin("*")
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"}, allowedHeaders = "*", allowCredentials = "true")
 public class AuthenticationController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class AuthenticationController {
         try {
             authentication(jwtRequest.getUsername(),jwtRequest.getPassword());
 
-        }  catch (Exception exception) {
+        }  catch (UserNotFoundException exception) {
             exception.printStackTrace();
             throw new Exception("User not found");
         }

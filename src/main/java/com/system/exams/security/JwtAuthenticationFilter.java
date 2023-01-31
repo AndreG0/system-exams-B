@@ -32,18 +32,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String jwtToken = parseJwt(request);
 
-            if (jwtToken != null && jwtUtils.validateJwtToken(jwtToken)){
+            if (jwtToken != null && jwtUtils.validateJwtToken(jwtToken)) {
                 String username = jwtUtils.extractUsername(jwtToken);
-
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
                                 userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
@@ -55,15 +55,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7, headerAuth.length());
-        }
+        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.replace("Bearer ", "");
 
+        }
         return null;
     }
 
+}
 
-    }
 
 
 

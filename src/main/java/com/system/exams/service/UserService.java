@@ -3,6 +3,7 @@ package com.system.exams.service;
 
 import com.system.exams.entity.User;
 import com.system.exams.entity.UserRole;
+import com.system.exams.exceptions.UserFoundException;
 import com.system.exams.repository.RoleRepository;
 import com.system.exams.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UserService {
       User localUser = userRepository.findByName(user.getName());
         if (localUser != null){
             System.out.println("el usuario ya existe");
-            throw new Exception("el usuario ya esta presente");
+            throw new UserFoundException("el usuario ya esta presente");
         }
         else {
             for (UserRole userRole:userRoles){
