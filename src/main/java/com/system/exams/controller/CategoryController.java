@@ -26,12 +26,12 @@ public class CategoryController {
         return categoryService.getCategory(categoryId);
     }
 
-    @GetMapping("/category-list")
+    @GetMapping("/list")
     public ResponseEntity<?> list(){
         return ResponseEntity.ok(categoryService.getCategories());
     }
 
-    @PutMapping("/update-category")
+    @PutMapping("/update")
     public Category updateCategory (@RequestBody Category category){
         return categoryService.upDateCategory(category);
     }

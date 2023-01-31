@@ -15,12 +15,12 @@ public class ExamController {
     private ExamService examService;
 
 
-    @PostMapping("/")
+    @PostMapping("/create")
     public ResponseEntity<Exam> createExam(@RequestBody Exam exam){
         return ResponseEntity.ok(examService.createExam(exam));
     }
 
-    @PutMapping("/update-exam")
+    @PutMapping("/update")
     public ResponseEntity<Exam> updateExam (@RequestBody Exam exam){
         return ResponseEntity.ok(examService.upDateExam(exam));
     }
