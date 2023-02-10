@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/question")
@@ -57,6 +54,40 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     public void deleteQuestion (@PathVariable("questionId") int questionId){
         questionService.deleteQuestion(questionId );
+    }
+    @GetMapping("/exam/all/{examId}")
+    public ResponseEntity<?>listQuestionExamAsAdmin(@PathVariable ("examId")int examId){
+        Exam exam = new Exam();
+        exam.setExamId(examId);
+        Set<Question> questions = questionService.getQuestionsFromTheExam(exam);
+        return ResponseEntity.ok(questions);
+    }
+
+    @PostMapping("/review-exam")
+    public ResponseEntity<?> reviewExam(@RequestBody List<Question> questions){
+        double maximumPoints = 0;
+        Integer correctAnswers = 0;
+        Integer attempts = 0;
+
+        for(Question q : questions){
+            Question question = this.questionService.listQuestion(q.getQuestionId());
+            if (question.getAnswer().equals(q.getAnswerChosen())){
+                correctAnswers ++;
+                double points = Double.parseDouble(questions.get(0).getExam().getMaximumPoints())/questions.size();
+                maximumPoints += points;
+            }
+
+            if (q.getAnswerChosen() != null){
+                attempts ++;
+            }
+        }
+
+        Map<String, Object> answers = new HashMap<>();
+        answers.put("maximumPoints", maximumPoints);
+        answers.put("correctAnswers", correctAnswers);
+        answers.put("attempts", attempts);
+        return ResponseEntity.ok(answers);
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.system.exams.service.Impl;
 
+import com.system.exams.entity.Category;
 import com.system.exams.entity.Exam;
 import com.system.exams.repository.ExamRepository;
 import com.system.exams.service.ExamService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -41,4 +43,21 @@ public class ExamServiceImpl implements ExamService {
         exam.setExamId(examId);
         examRepository.delete(exam);
     }
+
+    @Override
+    public List<Exam> listExamsByCategory(Category category) {
+        return this.examRepository.findByCategory(category);
+    }
+
+    @Override
+    public List<Exam> listExamActive() {
+        return examRepository.findByActive(true);
+    }
+
+    @Override
+    public List<Exam> listExamActiveByCategory(Category category) {
+        return examRepository.findByCategoryAndActive(category, true);
+    }
+
+
 }

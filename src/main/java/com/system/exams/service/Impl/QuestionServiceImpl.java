@@ -49,6 +49,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question listQuestion(int questionId) {
-        return null;
+        return this.questionRepository.getOne(questionId);
     }
 }
